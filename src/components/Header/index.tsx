@@ -6,6 +6,14 @@ export function Header() {
   return (
     <div className={styles.container}>
       <img src={logo} alt="Logo" />
+
+      <header>
+        <span>
+          <strong>5 </strong> de 10 tentativas
+        </span>
+
+        button
+      </header>
     </div>
   );
 }
