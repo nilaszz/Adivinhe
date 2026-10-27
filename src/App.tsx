@@ -19,11 +19,13 @@ export default function App() {
 
           <Tips tip="Uma das linguagens de programação dinâmica mais populares" />
 
+          <div className={styles.word}>
           <Letter value= "R" />
           <Letter value= "E" />
           <Letter value= "A" />
           <Letter value= "C" />
           <Letter value= "T" /> 
+          </div>
         </main>
       </div>
     </>
