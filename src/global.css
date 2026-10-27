@@ -9,6 +9,12 @@
 }
 
 body {
+  background-color: #f5f5fa;
+  font-family: "Noto Sans", serif;
+  font-optical-sizing: auto;
+}
+
+input {
   font-family: "Noto Sans", serif;
   font-optical-sizing: auto;
 }
