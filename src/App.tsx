@@ -13,6 +13,10 @@ import { LettersUsed, type LettersUsedProps } from "./components/LettersUsed";
 
 const ATTEMPTS_MARGIN = 5
 
+type GameDialog =
+  | { type: "notice"; title: string; message: string; action?: "new-game" }
+  | { type: "confirm-restart"; title: string; message: string }
+
 
 export default function App() {
   const [score, setScore] = useState(0)
@@ -20,13 +24,14 @@ export default function App() {
   const [letter, setLetter] = useState("")
   const [challenge, setChallenge ] = useState<Challenge | null>(null)
   const [theme, setTheme] = useState<"light" | "dark">("light")
+  const [dialog, setDialog] = useState<GameDialog | null>(null)
 
   function handleRestartGame() {
-    const isConfirmed = window.confirm("você tem certeza que desejar reiniciar?")
-
-    if (isConfirmed) {
-      startGame()
-    }
+    setDialog({
+      type: "confirm-restart",
+      title: "Reiniciar partida?",
+      message: "Seu progresso atual será perdido. Deseja começar uma nova partida?",
+    })
   }
 
   function startGame() {
@@ -46,14 +51,22 @@ export default function App() {
     }
 
     if(!letter.trim()){
-      return alert("Digite uma letra!")
+      return setDialog({
+        type: "notice",
+        title: "Digite uma letra",
+        message: "Escolha uma letra antes de confirmar seu palpite.",
+      })
     }
 
     const value = letter.toUpperCase()
     const exists = lettersUsed.find((used) => used.value.toUpperCase() === value)
 
     if (exists) {
-      return alert("você já utilizou a letra " + value)
+      return setDialog({
+        type: "notice",
+        title: "Letra já utilizada",
+        message: `Você já tentou a letra ${value}. Escolha outra.`,
+      })
     }
 
     const hits = challenge.word.toUpperCase().split("").filter((charm) => charm === value).length
@@ -67,18 +80,21 @@ export default function App() {
     setLetter("")
   }
 
-  function endGame (message: string){
-    alert(message)
-    startGame(
-
-    )}
+  function endGame(message: string) {
+    setDialog({
+      type: "notice",
+      title: message.startsWith("🎉") ? "Você acertou!" : "Fim de jogo",
+      message,
+      action: "new-game",
+    })
+  }
 
   useEffect(() => {
     startGame()
   },[])
 
   useEffect(() => {
-    if (!challenge) {
+    if (!challenge || dialog) {
       return
     }
 
@@ -88,16 +104,20 @@ export default function App() {
 
     const timeout = setTimeout(() => {
       if (score === challenge.word.length) {
-        return endGame("Parabéns, você descobriu a palavra!")
+        return endGame(
+          `🎉 Parabéns! Você descobriu “${challenge.word}”. Que tal jogar mais uma?`,
+        )
       }
 
       if (lettersUsed.length >= attemptLimit) {
-        return endGame(`Você perdeu! A palavra era ${challenge.word}.`)
+        return endGame(
+          `😅 Suas tentativas acabaram. A palavra era “${challenge.word}”. Tente novamente!`,
+        )
       }
     }, hasWon ? 1300 : 200)
 
     return () => clearTimeout(timeout)
-  }, [challenge, score, lettersUsed.length])
+  }, [challenge, score, lettersUsed.length, dialog])
 
   if(!challenge){
     return
@@ -141,7 +161,6 @@ export default function App() {
               key={index}
               value={letterUsed?.value}
               color={letterUsed?.correct ? "correct" : "default"}
-              reveal={letterUsed?.correct}
             />
           )})}
           
@@ -149,20 +168,74 @@ export default function App() {
 
           <h4>Palpite</h4>
 
-          <div className={styles.guess}>
-          <Input autoFocus
-          maxLength={1}
-          placeholder=""
-          value={letter}
-          onChange={(e) => setLetter(e.target.value)}
-          />
+          <form
+            className={styles.guess}
+            onSubmit={(event) => {
+              event.preventDefault()
+              handleConfirm()
+            }}
+          >
+            <Input
+              autoFocus
+              maxLength={1}
+              placeholder=""
+              value={letter}
+              onChange={(event) => setLetter(event.target.value)}
+            />
 
-          <Button title="Confirmar" onClick={handleConfirm} />
-
-          </div>
+            <Button title="Confirmar" type="submit" />
+          </form>
 
           <LettersUsed data={lettersUsed}/>
         </main>
+
+        <footer className={styles.footer}>
+          © made by nilasz
+        </footer>
+
+        {dialog && (
+          <div className={styles.dialogOverlay}>
+            <section
+              className={styles.dialog}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="game-dialog-title"
+              aria-describedby="game-dialog-message"
+            >
+              <h2 id="game-dialog-title">{dialog.title}</h2>
+              <p id="game-dialog-message">{dialog.message}</p>
+
+              <div className={styles.dialogActions}>
+                {dialog.type === "confirm-restart" && (
+                  <button
+                    type="button"
+                    className={styles.secondaryDialogButton}
+                    onClick={() => setDialog(null)}
+                  >
+                    Continuar jogando
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className={styles.primaryDialogButton}
+                  onClick={() => {
+                    if (dialog.type === "confirm-restart" || dialog.action === "new-game") {
+                      startGame()
+                    }
+                    setDialog(null)
+                  }}
+                  autoFocus
+                >
+                  {dialog.type === "confirm-restart"
+                    ? "Reiniciar"
+                    : dialog.action === "new-game"
+                      ? "Nova partida"
+                      : "Entendi"}
+                </button>
+              </div>
+            </section>
+          </div>
+        )}
       </div>
     </>
   );

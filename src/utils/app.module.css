@@ -3,6 +3,7 @@
   min-height: 100vh;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -37,10 +38,19 @@
 
 .container main {
   width: 556px;
+  margin: auto 0;
   background-color: var(--surface-background);
   padding: 2rem;
   padding-top: 4.5rem;
   border-radius: 0.75rem;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 1rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: center;
 }
 
 .themeToggle {
@@ -73,4 +83,81 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 0.75rem;
+}
+
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background-color: rgb(0 0 0 / 55%);
+}
+
+.dialog {
+  width: min(100%, 26rem);
+  padding: 2rem;
+  border: 1px solid var(--field-border);
+  border-radius: 0.75rem;
+  background-color: var(--surface-background);
+  color: var(--text-primary);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 25%);
+  animation: dialog-appear 0.2s ease-out;
+}
+
+.dialog h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.4rem;
+}
+
+.dialog p {
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.dialogActions button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.43rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.primaryDialogButton {
+  border: 2px solid #4f4fb9;
+  background-color: #6363db;
+  color: #ffffff;
+}
+
+.secondaryDialogButton {
+  border: 1px solid var(--field-border);
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+@keyframes dialog-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog {
+    animation: none;
+  }
 }
