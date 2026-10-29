@@ -11,11 +11,16 @@ import { Header } from "./components/Header";
 import { LettersUsed, type LettersUsedProps } from "./components/LettersUsed";
 
 
+const ATTEMPTS_MARGIN = 5
+
+
 export default function App() {
   const [score, setScore] = useState(0)
   const [lettersUsed, setLettersUsed] = useState<LettersUsedProps[]>([])
   const [letter, setLetter] = useState("")
   const [challenge, setChallenge ] = useState<Challenge | null>(null)
+
+
 
   function handleRestartGame() {
     alert("Restart game");
@@ -73,9 +78,16 @@ export default function App() {
     <>
       <div className={styles.container}>
         <main>
-          <Header current={score} max={10} onRestart={handleRestartGame} />
+          <Header 
+          current={lettersUsed.length} 
+          max={challenge.word.length + ATTEMPTS_MARGIN} 
+          onRestart={handleRestartGame} 
+          
+          />
+
 
           <Tips tip={challenge.tip} />
+
 
         <div className={styles.word}>
           {challenge.word.split("").map((letter, index) => {
