@@ -64,9 +64,35 @@ export default function App() {
     setLetter("")
   }
 
+  function endGame (message: string){
+    alert(message)
+    startGame(
+
+    )}
+
   useEffect(() => {
     startGame()
   },[])
+
+  useEffect(() => {
+    if (!challenge) {
+      return
+    }
+
+    const attemptLimit = challenge.word.length + ATTEMPTS_MARGIN
+
+    const timeout = setTimeout(() => {
+      if (score === challenge.word.length) {
+        return endGame("Parabéns, você descobriu a palavra!")
+      }
+
+      if (lettersUsed.length >= attemptLimit) {
+        return endGame(`Você perdeu! A palavra era ${challenge.word}.`)
+      }
+    }, 200)
+
+    return () => clearTimeout(timeout)
+  }, [challenge, score, lettersUsed.length])
 
   if(!challenge){
     return
