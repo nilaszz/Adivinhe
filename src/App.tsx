@@ -84,6 +84,8 @@ export default function App() {
 
     const attemptLimit = challenge.word.length + ATTEMPTS_MARGIN
 
+    const hasWon = score === challenge.word.length
+
     const timeout = setTimeout(() => {
       if (score === challenge.word.length) {
         return endGame("Parabéns, você descobriu a palavra!")
@@ -92,7 +94,7 @@ export default function App() {
       if (lettersUsed.length >= attemptLimit) {
         return endGame(`Você perdeu! A palavra era ${challenge.word}.`)
       }
-    }, 200)
+    }, hasWon ? 1300 : 200)
 
     return () => clearTimeout(timeout)
   }, [challenge, score, lettersUsed.length])
@@ -135,7 +137,12 @@ export default function App() {
            
           
             return(
-            <Letter key={index} value= {letterUsed?.value} color={letterUsed?.correct ? "correct" : "default"} />
+            <Letter
+              key={index}
+              value={letterUsed?.value}
+              color={letterUsed?.correct ? "correct" : "default"}
+              reveal={letterUsed?.correct}
+            />
           )})}
           
           </div>
@@ -145,7 +152,7 @@ export default function App() {
           <div className={styles.guess}>
           <Input autoFocus
           maxLength={1}
-          placeholder="?"
+          placeholder=""
           value={letter}
           onChange={(e) => setLetter(e.target.value)}
           />

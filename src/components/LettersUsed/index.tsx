@@ -25,6 +25,7 @@ export function LettersUsed({ data }: Props) {
             value={value} 
             size="small" 
             color={correct ? "correct" : "wrong"} 
+            animateEntry
             />
           ))}
             

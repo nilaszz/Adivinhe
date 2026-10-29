@@ -38,9 +38,76 @@
     color: #03ab4f;
 }
 
+.letterReveal {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: flip-letter 1.1s ease-in-out both;
+}
+
+.letterEnter {
+    animation: letter-enter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes letter-enter {
+    from {
+        opacity: 0;
+        transform: translateY(0.75rem) scale(0.75);
+    }
+
+    70% {
+        opacity: 1;
+        transform: translateY(-0.2rem) scale(1.08);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.letterFront,
+.letterBack {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--field-border);
+    border-radius: inherit;
+    backface-visibility: hidden;
+}
+
+.letterFront {
+    background-color: var(--field-background);
+}
+
+.letterBack {
+    transform: rotateY(180deg);
+    background-color: #e1f5ec;
+    border-color: #03ab4f;
+    color: #03ab4f;
+}
+
+@keyframes flip-letter {
+    from {
+        transform: perspective(600px) rotateY(0);
+    }
+
+    to {
+        transform: perspective(600px) rotateY(180deg);
+    }
+}
+
 
 .letterWrong {
     background-color: #ffcf62;
     border-color: #691b0a;
     color: #691b0a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .letterReveal,
+    .letterEnter {
+        animation-duration: 0.35s;
+    }
 }
