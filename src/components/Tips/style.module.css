@@ -1,7 +1,7 @@
 .tip {
     width: 100%;
-    background-color: #ebebfc;
-    color: #4f4fb9;
+    background-color: var(--tip-background);
+    color: var(--tip-text);
 
     border-radius: 0.62rem;
     padding: 1rem;

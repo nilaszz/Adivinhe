@@ -5,8 +5,8 @@
     border-radius: 0.62rem;
     box-sizing: border-box;
 
-    background-color: #ebebfc;
-    color: #6363db;
+    background-color: var(--field-background);
+    color: var(--field-text);
 
     text-transform: uppercase;
     font-size: 2rem;
@@ -26,7 +26,7 @@
 
     font-size: 1.25rem;
     font-weight: 500;
-    border: 1px solid #6363db;
+    border: 1px solid var(--field-border);
     
 
 }

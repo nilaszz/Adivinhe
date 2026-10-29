@@ -35,7 +35,7 @@
 
 .container > header span {
   font-size: 1.12rem;
-  color: #9b9b9b;
+  color: var(--text-muted);
 }
 
 

@@ -19,6 +19,7 @@ export default function App() {
   const [lettersUsed, setLettersUsed] = useState<LettersUsedProps[]>([])
   const [letter, setLetter] = useState("")
   const [challenge, setChallenge ] = useState<Challenge | null>(null)
+  const [theme, setTheme] = useState<"light" | "dark">("light")
 
   function handleRestartGame() {
     const isConfirmed = window.confirm("você tem certeza que desejar reiniciar?")
@@ -104,7 +105,16 @@ export default function App() {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.container} data-theme={theme}>
+        <button
+          type="button"
+          className={styles.themeToggle}
+          onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}
+          aria-pressed={theme === "dark"}
+        >
+          Ativar modo {theme === "light" ? "escuro" : "claro"}
+        </button>
+
         <main>
           <Header 
           current={lettersUsed.length} 
