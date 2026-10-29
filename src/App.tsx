@@ -161,6 +161,7 @@ export default function App() {
               key={index}
               value={letterUsed?.value}
               color={letterUsed?.correct ? "correct" : "default"}
+              reveal={letterUsed?.correct}
             />
           )})}
           
