@@ -24,12 +24,12 @@
   inset: 0;
   z-index: 3;
   display: flex;
-  animation: fade-in 0.22s ease-out both;
+  animation: fade-in 0.3s ease-out both;
 }
 
 .overlayClosing {
   pointer-events: none;
-  animation: fade-out 0.22s ease-in both;
+  animation: fade-out 0.3s ease-in both;
 }
 
 .backdrop {
@@ -48,11 +48,11 @@
   background-color: var(--surface-background);
   color: var(--text-primary);
   box-shadow: 0.75rem 0 2.5rem rgb(0 0 0 / 18%);
-  animation: slide-in 0.22s ease-out both;
+  animation: slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .drawerClosing {
-  animation: slide-out 0.22s ease-in both;
+  animation: slide-out 0.3s ease-in both;
 }
 
 .header {
@@ -218,12 +218,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .overlay,
+  .overlay {
+    animation-duration: 0.12s;
+  }
+
   .drawer {
     animation: none;
   }
 
   .overlayClosing {
-    visibility: hidden;
+    animation-duration: 0.12s;
   }
 }

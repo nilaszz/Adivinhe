@@ -9,6 +9,8 @@ type Props = {
   onThemeChange: (theme: Theme) => void;
 };
 
+const CLOSE_ANIMATION_DURATION = 300;
+
 const themeOptions: { value: Theme; label: string; description: string }[] = [
   { value: "light", label: "Claro", description: "Visual leve para ambientes iluminados" },
   { value: "dark", label: "Escuro", description: "Confortável para ambientes com pouca luz" },
@@ -17,6 +19,7 @@ const themeOptions: { value: Theme; label: string; description: string }[] = [
 export function ThemeMenu({ theme, onThemeChange }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
@@ -28,6 +31,8 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
       window.clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
+
+    setIsClosing(false);
 
     if (!isMounted) {
       setIsMounted(true);
@@ -48,6 +53,7 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
     }
 
     setIsOpen(false);
+    setIsClosing(true);
     triggerRef.current?.focus();
 
     if (closeTimeoutRef.current !== null) {
@@ -55,8 +61,9 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
     }
     closeTimeoutRef.current = window.setTimeout(() => {
       setIsMounted(false);
+      setIsClosing(false);
       closeTimeoutRef.current = null;
-    }, 220);
+    }, CLOSE_ANIMATION_DURATION);
   }, []);
 
   useEffect(() => {
@@ -119,7 +126,7 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
       </button>
 
       {isMounted && (
-        <div className={`${styles.overlay} ${!isOpen ? styles.overlayClosing : ""}`}>
+        <div className={`${styles.overlay} ${isClosing ? styles.overlayClosing : ""}`}>
           <button
             type="button"
             className={styles.backdrop}
@@ -129,7 +136,7 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
           <aside
             ref={drawerRef}
             id="theme-drawer"
-            className={`${styles.drawer} ${!isOpen ? styles.drawerClosing : ""}`}
+            className={`${styles.drawer} ${isClosing ? styles.drawerClosing : ""}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="theme-drawer-title"
