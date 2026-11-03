@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./style.module.css";
 
@@ -16,9 +16,48 @@ const themeOptions: { value: Theme; label: string; description: string }[] = [
 
 export function ThemeMenu({ theme, onThemeChange }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
+  const closeTimeoutRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+
+  const openMenu = useCallback(() => {
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+
+    if (!isMounted) {
+      setIsMounted(true);
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        setIsOpen(true);
+        animationFrameRef.current = null;
+      });
+      return;
+    }
+
+    setIsOpen(true);
+  }, [isMounted]);
+
+  const closeMenu = useCallback(() => {
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    setIsOpen(false);
+    triggerRef.current?.focus();
+
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+    }
+    closeTimeoutRef.current = window.setTimeout(() => {
+      setIsMounted(false);
+      closeTimeoutRef.current = null;
+    }, 220);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) {
@@ -29,8 +68,7 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setIsOpen(false);
-        triggerRef.current?.focus();
+        closeMenu();
         return;
       }
 
@@ -55,12 +93,16 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+  }, [closeMenu, isOpen]);
 
-  function closeMenu() {
-    setIsOpen(false);
-    triggerRef.current?.focus();
-  }
+  useEffect(() => () => {
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+    }
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+    }
+  }, []);
 
   return (
     <>
@@ -70,14 +112,14 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
         className={styles.trigger}
         aria-expanded={isOpen}
         aria-controls="theme-drawer"
-        onClick={() => setIsOpen(true)}
+        onClick={openMenu}
       >
         <span aria-hidden="true">◐</span>
         Aparência
       </button>
 
-      {isOpen && (
-        <div className={styles.overlay}>
+      {isMounted && (
+        <div className={`${styles.overlay} ${!isOpen ? styles.overlayClosing : ""}`}>
           <button
             type="button"
             className={styles.backdrop}
@@ -87,7 +129,7 @@ export function ThemeMenu({ theme, onThemeChange }: Props) {
           <aside
             ref={drawerRef}
             id="theme-drawer"
-            className={styles.drawer}
+            className={`${styles.drawer} ${!isOpen ? styles.drawerClosing : ""}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="theme-drawer-title"
