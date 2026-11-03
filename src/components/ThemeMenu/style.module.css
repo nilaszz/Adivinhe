@@ -176,7 +176,7 @@
 @keyframes slide-in {
   from {
     opacity: 0;
-    transform: translateX(-1rem);
+    transform: translateX(-100%);
   }
 
   to {
@@ -203,7 +203,7 @@
 
   to {
     opacity: 0;
-    transform: translateX(-1rem);
+    transform: translateX(-100%);
   }
 }
 
