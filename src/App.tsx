@@ -9,6 +9,7 @@ import { Tips } from "./components/Tips";
 import { Letter } from "./components/Letter";
 import { Header } from "./components/Header";
 import { LettersUsed, type LettersUsedProps } from "./components/LettersUsed";
+import { ThemeMenu } from "./components/ThemeMenu";
 
 
 const ATTEMPTS_MARGIN = 5
@@ -128,14 +129,7 @@ export default function App() {
   return (
     <>
       <div className={styles.container} data-theme={theme}>
-        <button
-          type="button"
-          className={styles.themeToggle}
-          onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}
-          aria-pressed={theme === "dark"}
-        >
-          Ativar modo {theme === "light" ? "escuro" : "claro"}
-        </button>
+        <ThemeMenu theme={theme} onThemeChange={setTheme} />
 
         <main>
           <Header 
