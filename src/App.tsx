@@ -13,6 +13,7 @@ import { ThemeMenu } from "./components/ThemeMenu";
 
 
 const ATTEMPTS_MARGIN = 5
+const THEME_STORAGE_KEY = "adivinhe-theme"
 
 type GameDialog =
   | { type: "notice"; title: string; message: string; action?: "new-game" }
@@ -24,7 +25,9 @@ export default function App() {
   const [lettersUsed, setLettersUsed] = useState<LettersUsedProps[]>([])
   const [letter, setLetter] = useState("")
   const [challenge, setChallenge ] = useState<Challenge | null>(null)
-  const [theme, setTheme] = useState<"light" | "dark">("light")
+  const [theme, setTheme] = useState<"light" | "dark">(() => (
+    window.localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light"
+  ))
   const [dialog, setDialog] = useState<GameDialog | null>(null)
 
   function handleRestartGame() {
@@ -93,6 +96,10 @@ export default function App() {
   useEffect(() => {
     startGame()
   },[])
+
+  useEffect(() => {
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme)
+  }, [theme])
 
   useEffect(() => {
     if (!challenge || dialog) {
