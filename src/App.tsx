@@ -1,7 +1,7 @@
 import styles from "./utils/app.module.css";
 
 import { useEffect, useState  } from "react"
-import { WORDS, type Challenge } from "./utils/words";
+import { WORD_CATEGORIES, type Challenge, type WordCategoryId } from "./utils/words";
 
 import { Input } from "./components/input";
 import { Button } from "./components/Button";
@@ -14,10 +14,16 @@ import { ThemeMenu, type Theme } from "./components/ThemeMenu";
 
 const ATTEMPTS_MARGIN = 5
 const THEME_STORAGE_KEY = "adivinhe-theme"
+const WORD_CATEGORY_STORAGE_KEY = "adivinhe-word-category"
 
 function getSavedTheme(): Theme {
   const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
   return savedTheme === "dark" || savedTheme === "terminal" ? savedTheme : "light"
+}
+
+function getSavedWordCategory(): WordCategoryId {
+  const savedCategory = window.localStorage.getItem(WORD_CATEGORY_STORAGE_KEY)
+  return WORD_CATEGORIES.find(({ id }) => id === savedCategory)?.id ?? "programming"
 }
 
 type GameDialog =
@@ -31,6 +37,7 @@ export default function App() {
   const [letter, setLetter] = useState("")
   const [challenge, setChallenge ] = useState<Challenge | null>(null)
   const [theme, setTheme] = useState<Theme>(getSavedTheme)
+  const [wordCategory, setWordCategory] = useState<WordCategoryId>(getSavedWordCategory)
   const [dialog, setDialog] = useState<GameDialog | null>(null)
 
   function handleRestartGame() {
@@ -41,15 +48,25 @@ export default function App() {
     })
   }
 
-  function startGame() {
-   const index = Math.floor(Math.random() * WORDS.length)
-   const randomWord = WORDS[index]
+  function startGame(categoryId = wordCategory) {
+   const category = WORD_CATEGORIES.find(({ id }) => id === categoryId)
+   if (!category) {
+     return
+   }
+   const index = Math.floor(Math.random() * category.challenges.length)
+   const randomWord = category.challenges[index]
 
    setChallenge(randomWord)
 
    setScore(0)
    setLetter("")
    setLettersUsed([])
+  }
+
+  function handleWordCategoryChange(categoryId: WordCategoryId) {
+    setWordCategory(categoryId)
+    setDialog(null)
+    startGame(categoryId)
   }
 
   function handleConfirm(){
@@ -105,6 +122,10 @@ export default function App() {
   }, [theme])
 
   useEffect(() => {
+    window.localStorage.setItem(WORD_CATEGORY_STORAGE_KEY, wordCategory)
+  }, [wordCategory])
+
+  useEffect(() => {
     if (!challenge || dialog) {
       return
     }
@@ -139,7 +160,12 @@ export default function App() {
   return (
     <>
       <div className={styles.container} data-theme={theme}>
-        <ThemeMenu theme={theme} onThemeChange={setTheme} />
+        <ThemeMenu
+          theme={theme}
+          onThemeChange={setTheme}
+          wordCategory={wordCategory}
+          onWordCategoryChange={handleWordCategoryChange}
+        />
 
         <main>
           <Header 

@@ -43,7 +43,9 @@
 .drawer {
   position: relative;
   width: min(22rem, calc(100% - 2.5rem));
-  min-height: 100%;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
   padding: 2rem 1.5rem;
   background-color: var(--surface-background);
   color: var(--text-primary);
@@ -92,6 +94,17 @@
   line-height: 1.5;
 }
 
+.section + .section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--field-border);
+}
+
+.sectionTitle {
+  margin-bottom: 0.75rem;
+  font-size: 0.98rem;
+}
+
 .options {
   display: grid;
   gap: 0.75rem;
@@ -109,6 +122,50 @@
   background-color: var(--surface-background);
   color: var(--text-primary);
   text-align: left;
+}
+
+.categoryOptions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.categoryOption {
+  display: grid;
+  grid-template-columns: 1fr 1.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--field-border);
+  border-radius: 0.65rem;
+  background-color: var(--surface-background);
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.categoryOption[aria-pressed="true"] {
+  outline: 2px solid var(--field-border);
+  outline-offset: 1px;
+}
+
+.categoryText {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.categoryText strong {
+  font-size: 0.9rem;
+}
+
+.categoryText > span,
+.categoryHint {
+  color: var(--text-muted);
+  font-size: 0.73rem;
+  line-height: 1.35;
+}
+
+.categoryHint {
+  margin-top: 0.6rem;
 }
 
 .option[aria-pressed="true"] {
