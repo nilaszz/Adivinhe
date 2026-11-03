@@ -151,6 +151,11 @@
   color: #d0d0ff;
 }
 
+.terminal {
+  background-color: #0e1c14;
+  color: #8effad;
+}
+
 .optionText {
   display: grid;
   gap: 0.25rem;

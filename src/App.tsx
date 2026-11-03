@@ -9,11 +9,16 @@ import { Tips } from "./components/Tips";
 import { Letter } from "./components/Letter";
 import { Header } from "./components/Header";
 import { LettersUsed, type LettersUsedProps } from "./components/LettersUsed";
-import { ThemeMenu } from "./components/ThemeMenu";
+import { ThemeMenu, type Theme } from "./components/ThemeMenu";
 
 
 const ATTEMPTS_MARGIN = 5
 const THEME_STORAGE_KEY = "adivinhe-theme"
+
+function getSavedTheme(): Theme {
+  const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
+  return savedTheme === "dark" || savedTheme === "terminal" ? savedTheme : "light"
+}
 
 type GameDialog =
   | { type: "notice"; title: string; message: string; action?: "new-game" }
@@ -25,9 +30,7 @@ export default function App() {
   const [lettersUsed, setLettersUsed] = useState<LettersUsedProps[]>([])
   const [letter, setLetter] = useState("")
   const [challenge, setChallenge ] = useState<Challenge | null>(null)
-  const [theme, setTheme] = useState<"light" | "dark">(() => (
-    window.localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light"
-  ))
+  const [theme, setTheme] = useState<Theme>(getSavedTheme)
   const [dialog, setDialog] = useState<GameDialog | null>(null)
 
   function handleRestartGame() {

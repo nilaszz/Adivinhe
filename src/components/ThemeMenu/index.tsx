@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./style.module.css";
 
-type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "terminal";
 
 type Props = {
   theme: Theme;
@@ -14,6 +14,7 @@ const CLOSE_ANIMATION_DURATION = 300;
 const themeOptions: { value: Theme; label: string; description: string }[] = [
   { value: "light", label: "Claro", description: "Visual leve para ambientes iluminados" },
   { value: "dark", label: "Escuro", description: "Confortável para ambientes com pouca luz" },
+  { value: "terminal", label: "Terminal", description: "Visual tecnológico em verde e preto" },
 ];
 
 export function ThemeMenu({ theme, onThemeChange }: Props) {

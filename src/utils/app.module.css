@@ -22,6 +22,12 @@
   --field-border: #6363db;
   --tip-background: #ebebfc;
   --tip-text: #4f4fb9;
+  --action-background: #6363db;
+  --action-border: #4f4fb9;
+  --action-text: #ebebfc;
+  --success-background: #e1f5ec;
+  --success-border: #03ab4f;
+  --success-text: #03ab4f;
 }
 
 .container[data-theme="dark"] {
@@ -34,6 +40,36 @@
   --field-border: #8c8ce8;
   --tip-background: #34354a;
   --tip-text: #d0d0ff;
+  --action-background: #6363db;
+  --action-border: #4f4fb9;
+  --action-text: #ebebfc;
+  --success-background: #e1f5ec;
+  --success-border: #03ab4f;
+  --success-text: #03ab4f;
+}
+
+.container[data-theme="terminal"] {
+  --page-background: #07110c;
+  --surface-background: #0e1c14;
+  --text-primary: #d5f5df;
+  --text-muted: #8eae98;
+  --field-background: #10251a;
+  --field-text: #8effad;
+  --field-border: #398758;
+  --tip-background: #10251a;
+  --tip-text: #a4ffbb;
+  --action-background: #18743a;
+  --action-border: #50c878;
+  --action-text: #e4ffeb;
+  --success-background: #133921;
+  --success-border: #50c878;
+  --success-text: #8effad;
+  font-family: "Courier New", monospace;
+}
+
+.container[data-theme="terminal"] input,
+.container[data-theme="terminal"] button {
+  font-family: inherit;
 }
 
 .container main {
@@ -118,9 +154,9 @@
 }
 
 .primaryDialogButton {
-  border: 2px solid #4f4fb9;
-  background-color: #6363db;
-  color: #ffffff;
+  border: 2px solid var(--action-border);
+  background-color: var(--action-background);
+  color: var(--action-text);
 }
 
 .secondaryDialogButton {
