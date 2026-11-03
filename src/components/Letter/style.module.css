@@ -33,9 +33,9 @@
 
 
 .letterCorrect {
-    background-color: #e1f5ec;
-    border-color: #03ab4f;
-    color: #03ab4f;
+    background-color: var(--success-background);
+    border-color: var(--success-border);
+    color: var(--success-text);
 }
 
 .letterReveal {
@@ -83,9 +83,9 @@
 
 .letterBack {
     transform: rotateY(180deg);
-    background-color: #e1f5ec;
-    border-color: #03ab4f;
-    color: #03ab4f;
+    background-color: var(--success-background);
+    border-color: var(--success-border);
+    color: var(--success-text);
 }
 
 @keyframes flip-letter {

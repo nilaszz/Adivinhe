@@ -1,7 +1,7 @@
 .lettersUsed {
     width: 100%;
     margin-top: 3.25rem;
-    border-top: 1px solid #c3c3c3;
+    border-top: 1px solid var(--field-border);
 }
 
 
