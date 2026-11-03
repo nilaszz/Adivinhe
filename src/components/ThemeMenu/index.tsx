@@ -131,7 +131,7 @@ export function ThemeMenu({
         onClick={openMenu}
       >
         <span aria-hidden="true">◐</span>
-        Aparência
+        Personalizar
       </button>
 
       {isMounted && (
@@ -139,7 +139,7 @@ export function ThemeMenu({
           <button
             type="button"
             className={styles.backdrop}
-            aria-label="Fechar menu de aparência"
+            aria-label="Fechar menu de personalização"
             onClick={closeMenu}
           />
           <aside
@@ -153,13 +153,13 @@ export function ThemeMenu({
             <header className={styles.header}>
               <div>
                 <p className={styles.eyebrow}>PERSONALIZAÇÃO</p>
-                <h2 id="theme-drawer-title">Aparência</h2>
+                <h2 id="theme-drawer-title">Personalização</h2>
               </div>
               <button
                 ref={closeRef}
                 type="button"
                 className={styles.close}
-                aria-label="Fechar menu de aparência"
+                aria-label="Fechar menu de personalização"
                 onClick={closeMenu}
               >
                 ×
